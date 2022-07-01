@@ -9,8 +9,7 @@ make
 ## Deploy to Local Dev
 ```
 npx hardhat node
-truffle build
-truffle deploy
+npx hardhat run scripts/deploy-counter-script.js --network localhost
 ```
 
 ## Run Frontend App
