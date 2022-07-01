@@ -6,6 +6,13 @@
 make
 ```
 
+## Deploy to Local Dev
+```
+npx hardhat node
+truffle build
+truffle deploy
+```
+
 ## Run Frontend App
 ```
 cd counter-app

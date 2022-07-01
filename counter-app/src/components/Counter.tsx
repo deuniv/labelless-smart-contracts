@@ -13,7 +13,7 @@ const HARDHAT_NETWORK_ID = '1337'; // to workaround compatibility with metamask
 // This is an error code that indicates that the user canceled a transaction
 // const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
 
-const CHAIN_COUNTER_ADDRESS = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+const CHAIN_COUNTER_ADDRESS = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
 declare var window: any;
 
