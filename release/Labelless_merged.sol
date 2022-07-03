@@ -3106,6 +3106,10 @@ contract Labelless {
     LabellessTask _tasks;
     mapping(uint256 => LabellessTaskDetails) _taskDetails;
 
+    uint256 PoolTopLabellerUsdAmount;
+    uint256 PoolTreasuryUsdAmount;
+    uint256 PoolMarketUsdAmount;
+
     function initilaize(IERC20 USD, LabellessToken LLT, LabellessGovToken xLLT, LabellessSoulBoundToken LST, LabellessTask tasks) public {
         _usd = USD;
         _llt = LLT;
@@ -3195,6 +3199,19 @@ contract Labelless {
         
         _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.innovatorUsdValue);
         _llt.mint(taskDetails.Verifier, taskDetails.innovatorLltValue);
+
+        
+        
+        PoolTopLabellerUsdAmount += bFee; 
+
+        
+        PoolTreasuryUsdAmount += cFee;
+
+        
+        PoolMarketUsdAmount += dFee;
+        
+        
+        
 
         
         _llt.mint(msg.sender, 10000000); 

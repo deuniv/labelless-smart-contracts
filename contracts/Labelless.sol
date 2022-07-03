@@ -161,6 +161,10 @@ contract Labelless {
     LabellessTask _tasks;
     mapping(uint256 => LabellessTaskDetails) _taskDetails;
 
+    uint256 PoolTopLabellerUsdAmount;
+    uint256 PoolTreasuryUsdAmount;
+    uint256 PoolMarketUsdAmount;
+
     function initilaize(IERC20 USD, LabellessToken LLT, LabellessGovToken xLLT, LabellessSoulBoundToken LST, LabellessTask tasks) public {
         _usd = USD;
         _llt = LLT;
@@ -250,6 +254,19 @@ contract Labelless {
         // To Innovator
         _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.innovatorUsdValue);
         _llt.mint(taskDetails.Verifier, taskDetails.innovatorLltValue);
+
+        // TODO:  "Distribute $ to active labeler, proportional to LLTs"
+        // Get list of active labellers, for loop, mint LLT to top labellers
+        PoolTopLabellerUsdAmount += bFee; // now keep in platform and distribute later
+
+        // "Treasury"
+        PoolTreasuryUsdAmount += cFee;
+
+        // "Buy on open market" , AMM bot calling to external swap to buy LLT with usd, on market rate
+        PoolMarketUsdAmount += dFee;
+        // uint256 _amountIn = dFee;
+        // uint256[] memory amountOutMins = IUniswapV2Router(UNISWAP_V2_ROUTER).getAmountsOut(_amountIn, path);
+        // IUniswapV2Router(UNISWAP_V2_ROUTER).swapExactTokensForTokens(_amountIn, _amountOutMin, path, _to, block.timestamp);
 
         // Award the distributor action taker, it is Labelless DAO by default (?)
         _llt.mint(msg.sender, 10000000); // Award the diststributor : ETH/SOL => LLT / AMM
