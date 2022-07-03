@@ -174,6 +174,10 @@ contract Labelless {
 
     // Labeller
     function takeTask(uint256 taskId) public {
+        // TODO: implement following
+        // To avoid one create many users and take the tasks,
+        // we can require users to deposit a certain amount of LLT,
+        // we will return the LLT after it’s submitted 3days later.
         _tasks.takeTask(address(this), taskId);
     }
 
