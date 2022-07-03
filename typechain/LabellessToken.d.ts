@@ -28,7 +28,7 @@ interface LabellessTokenInterface extends ethers.utils.Interface {
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "mint(uint256)": FunctionFragment;
+    "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
@@ -54,7 +54,10 @@ interface LabellessTokenInterface extends ethers.utils.Interface {
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
@@ -197,11 +200,13 @@ export class LabellessToken extends Contract {
     ): Promise<ContractTransaction>;
 
     mint(
+      owner: string,
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "mint(uint256)"(
+    "mint(address,uint256)"(
+      owner: string,
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
@@ -329,11 +334,13 @@ export class LabellessToken extends Contract {
   ): Promise<ContractTransaction>;
 
   mint(
+    owner: string,
     amount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "mint(uint256)"(
+  "mint(address,uint256)"(
+    owner: string,
     amount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
@@ -436,9 +443,14 @@ export class LabellessToken extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mint(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    mint(
+      owner: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    "mint(uint256)"(
+    "mint(address,uint256)"(
+      owner: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -552,9 +564,14 @@ export class LabellessToken extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    mint(amount: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
+    mint(
+      owner: string,
+      amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
 
-    "mint(uint256)"(
+    "mint(address,uint256)"(
+      owner: string,
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
@@ -662,11 +679,13 @@ export class LabellessToken extends Contract {
     ): Promise<PopulatedTransaction>;
 
     mint(
+      owner: string,
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "mint(uint256)"(
+    "mint(address,uint256)"(
+      owner: string,
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;

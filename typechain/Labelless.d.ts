@@ -23,6 +23,7 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 interface LabellessInterface extends ethers.utils.Interface {
   functions: {
     "createTask(string,string,uint256)": FunctionFragment;
+    "distributeAwards(uint256)": FunctionFragment;
     "initilaize(address,address,address,address,address)": FunctionFragment;
     "rejectTask(uint256)": FunctionFragment;
     "reviewTask(uint256)": FunctionFragment;
@@ -34,6 +35,10 @@ interface LabellessInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "createTask",
     values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "distributeAwards",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "initilaize",
@@ -61,6 +66,10 @@ interface LabellessInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "createTask", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "distributeAwards",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initilaize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "rejectTask", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "reviewTask", data: BytesLike): Result;
@@ -96,6 +105,16 @@ export class Labelless extends Contract {
       taskDetailUri: string,
       name: string,
       amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    distributeAwards(
+      taskId: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "distributeAwards(uint256)"(
+      taskId: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -184,6 +203,16 @@ export class Labelless extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  distributeAwards(
+    taskId: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "distributeAwards(uint256)"(
+    taskId: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   initilaize(
     USD: string,
     LLT: string,
@@ -269,6 +298,16 @@ export class Labelless extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    distributeAwards(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "distributeAwards(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     initilaize(
       USD: string,
       LLT: string,
@@ -345,6 +384,16 @@ export class Labelless extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    distributeAwards(
+      taskId: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "distributeAwards(uint256)"(
+      taskId: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     initilaize(
       USD: string,
       LLT: string,
@@ -416,6 +465,16 @@ export class Labelless extends Contract {
       taskDetailUri: string,
       name: string,
       amount: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    distributeAwards(
+      taskId: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "distributeAwards(uint256)"(
+      taskId: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
