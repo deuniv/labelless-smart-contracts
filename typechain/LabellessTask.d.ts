@@ -25,8 +25,10 @@ interface LabellessTaskInterface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
-    "createTask(address,string,string)": FunctionFragment;
+    "createTask(address,string,string,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getTaskLabeller(uint256)": FunctionFragment;
+    "getTaskUsdAmount(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -54,10 +56,18 @@ interface LabellessTaskInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "createTask",
-    values: [string, string, string]
+    values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTaskLabeller",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTaskUsdAmount",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -129,6 +139,14 @@ interface LabellessTaskInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "createTask", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTaskLabeller",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTaskUsdAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -252,13 +270,15 @@ export class LabellessTask extends Contract {
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "createTask(address,string,string)"(
+    "createTask(address,string,string,uint256)"(
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -274,6 +294,34 @@ export class LabellessTask extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: string;
+    }>;
+
+    getTaskLabeller(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "getTaskLabeller(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    getTaskUsdAmount(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "getTaskUsdAmount(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
     }>;
 
     isApprovedForAll(
@@ -531,13 +579,15 @@ export class LabellessTask extends Contract {
     owner: string,
     taskDetailUri: string,
     name: string,
+    usdAmount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "createTask(address,string,string)"(
+  "createTask(address,string,string,uint256)"(
     owner: string,
     taskDetailUri: string,
     name: string,
+    usdAmount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -550,6 +600,26 @@ export class LabellessTask extends Contract {
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getTaskLabeller(
+    taskId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getTaskLabeller(uint256)"(
+    taskId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getTaskUsdAmount(
+    taskId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getTaskUsdAmount(uint256)"(
+    taskId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   isApprovedForAll(
     owner: string,
@@ -752,13 +822,15 @@ export class LabellessTask extends Contract {
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "createTask(address,string,string)"(
+    "createTask(address,string,string,uint256)"(
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -771,6 +843,26 @@ export class LabellessTask extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getTaskLabeller(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getTaskLabeller(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getTaskUsdAmount(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getTaskUsdAmount(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: string,
@@ -1006,13 +1098,15 @@ export class LabellessTask extends Contract {
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "createTask(address,string,string)"(
+    "createTask(address,string,string,uint256)"(
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -1023,6 +1117,26 @@ export class LabellessTask extends Contract {
 
     "getApproved(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTaskLabeller(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getTaskLabeller(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTaskUsdAmount(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getTaskUsdAmount(uint256)"(
+      taskId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1237,13 +1351,15 @@ export class LabellessTask extends Contract {
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "createTask(address,string,string)"(
+    "createTask(address,string,string,uint256)"(
       owner: string,
       taskDetailUri: string,
       name: string,
+      usdAmount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
@@ -1254,6 +1370,26 @@ export class LabellessTask extends Contract {
 
     "getApproved(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTaskLabeller(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getTaskLabeller(uint256)"(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTaskUsdAmount(
+      taskId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getTaskUsdAmount(uint256)"(
+      taskId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

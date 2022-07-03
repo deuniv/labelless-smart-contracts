@@ -14,7 +14,11 @@ contract LabellessStableToken is ERC20 {
 
 contract LabellessToken is ERC20 {
     constructor() ERC20("Labelless Utility Token", "LLT") public {
-        _mint(msg.sender, 10000000000000000000000000000);
+        // _mint(msg.sender, 10000000000000000000000000000);
+    }
+
+    function mint(uint256 amount) public {
+        _mint(msg.sender, amount);
     }
 }
 
@@ -48,6 +52,8 @@ contract LabellessTask is ERC721 {
         string DetailUri;
         string ResultUri;
         TaskState State;
+        address Labeller;
+        uint256 UsdAmount;
     }
 
     constructor() ERC721("Labelless Task", "LLTSK") public {  
@@ -74,7 +80,15 @@ contract LabellessTask is ERC721 {
         _;
     }
 
-    function createTask(address owner, string memory taskDetailUri, string memory name) public returns (uint256) {
+    function getTaskUsdAmount(uint256 taskId) public view returns(uint256) {
+        return _taskMapping[taskId].UsdAmount;
+    }
+
+    function getTaskLabeller(uint256 taskId) public view returns(address) {
+        return _taskMapping[taskId].Labeller;
+    }
+
+    function createTask(address owner, string memory taskDetailUri, string memory name, uint256 usdAmount) public returns (uint256) {
         _taskIds.increment();
 
         uint256 newTaskId = _taskIds.current();
@@ -82,6 +96,7 @@ contract LabellessTask is ERC721 {
         _taskMapping[newTaskId].Name = name;
         _taskMapping[newTaskId].DetailUri = taskDetailUri;
         _taskMapping[newTaskId].State = TaskState.TODO;
+        _taskMapping[newTaskId].UsdAmount = usdAmount;
         emit TaskToTodo(msg.sender, newTaskId, name);
         return newTaskId;
     }
@@ -91,6 +106,7 @@ contract LabellessTask is ERC721 {
         require(balanceOf(msg.sender) == 0, "Sender has alrady taken one task.");
         require(_taskMapping[taskId].State == TaskState.TODO || _taskMapping[taskId].State == TaskState.REJECTED, "Task must be in TODO or REJECTED state to be taken.");
         _safeTransfer(owner, msg.sender, taskId, "");
+        _taskMapping[taskId].Labeller = msg.sender;
         _taskMapping[taskId].State = TaskState.IN_PROGRESS;
         emit TaskToInProgress(msg.sender, taskId);
     }
@@ -137,19 +153,23 @@ contract Labelless {
 
     LabellessTask _tasks;
 
+    uint256 _aFeePercentage;
+
     function initilaize(IERC20 USD, LabellessToken LLT, LabellessGovToken xLLT, LabellessSoulBoundToken LST, LabellessTask tasks) public {
         _usd = USD;
         _llt = LLT;
         _xllt = xLLT;
         _lst = LST;
         _tasks = tasks;
+
+        _aFeePercentage = 5; // 5%
     }
 
     // Customer
     // Require virtually "payable" by ERC20 USDC
     function createTask(string memory taskDetailUri, string memory name, uint256 amount) public {
         require(_usd.transferFrom(msg.sender, address(this), amount));
-        _tasks.createTask(address(this), taskDetailUri, name);
+        _tasks.createTask(address(this), taskDetailUri, name, amount);
     }
 
     // Labeller
@@ -167,31 +187,14 @@ contract Labelless {
 
     function verifyTask(uint256 taskId) public {
         _tasks.verifyTask(address(this), taskId);
+        uint256 taskUsdAmount = _tasks.getTaskUsdAmount(taskId);
+        address taskLabeller = _tasks.getTaskLabeller(taskId);
+        uint256 awardValue = taskUsdAmount * (100 - _aFeePercentage)/ 100 / 3;
+        _usd.transferFrom(address(this), taskLabeller, awardValue);
+        _llt.mint(awardValue);
     }
 
     function rejectTask(uint256 taskId) public {
         _tasks.verifyTask(address(this), taskId);
-    }
-
-    uint256 count = 0;
-    event CountedTo(uint256 number);
-    function getCount() public view returns (uint256) {
-        return count;
-    }
-    function countUp() public returns (uint256) {
-        console.log("countUp: count =", count);
-        uint256 newCount = count + 1;
-        require(newCount > count, "Uint256 overflow");
-        count = newCount;
-        emit CountedTo(count);
-        return count;
-    }
-    function countDown() public returns (uint256) {
-        console.log("countDown: count =", count);
-        uint256 newCount = count - 1;
-        require(newCount < count, "Uint256 underflow");
-        count = newCount;
-        emit CountedTo(count);
-        return count;
     }
 }

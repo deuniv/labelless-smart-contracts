@@ -22,10 +22,7 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
 interface LabellessInterface extends ethers.utils.Interface {
   functions: {
-    "countDown()": FunctionFragment;
-    "countUp()": FunctionFragment;
     "createTask(string,string,uint256)": FunctionFragment;
-    "getCount()": FunctionFragment;
     "initilaize(address,address,address,address,address)": FunctionFragment;
     "rejectTask(uint256)": FunctionFragment;
     "reviewTask(uint256)": FunctionFragment;
@@ -34,13 +31,10 @@ interface LabellessInterface extends ethers.utils.Interface {
     "verifyTask(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "countDown", values?: undefined): string;
-  encodeFunctionData(functionFragment: "countUp", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "createTask",
     values: [string, string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "getCount", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "initilaize",
     values: [string, string, string, string, string]
@@ -66,10 +60,7 @@ interface LabellessInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "countDown", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "countUp", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "createTask", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getCount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initilaize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "rejectTask", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "reviewTask", data: BytesLike): Result;
@@ -77,11 +68,7 @@ interface LabellessInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "takeTask", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "verifyTask", data: BytesLike): Result;
 
-  events: {
-    "CountedTo(uint256)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "CountedTo"): EventFragment;
+  events: {};
 }
 
 export class Labelless extends Contract {
@@ -98,14 +85,6 @@ export class Labelless extends Contract {
   interface: LabellessInterface;
 
   functions: {
-    countDown(overrides?: Overrides): Promise<ContractTransaction>;
-
-    "countDown()"(overrides?: Overrides): Promise<ContractTransaction>;
-
-    countUp(overrides?: Overrides): Promise<ContractTransaction>;
-
-    "countUp()"(overrides?: Overrides): Promise<ContractTransaction>;
-
     createTask(
       taskDetailUri: string,
       name: string,
@@ -119,18 +98,6 @@ export class Labelless extends Contract {
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
-
-    getCount(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: BigNumber;
-    }>;
-
-    "getCount()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: BigNumber;
-    }>;
 
     initilaize(
       USD: string,
@@ -203,14 +170,6 @@ export class Labelless extends Contract {
     ): Promise<ContractTransaction>;
   };
 
-  countDown(overrides?: Overrides): Promise<ContractTransaction>;
-
-  "countDown()"(overrides?: Overrides): Promise<ContractTransaction>;
-
-  countUp(overrides?: Overrides): Promise<ContractTransaction>;
-
-  "countUp()"(overrides?: Overrides): Promise<ContractTransaction>;
-
   createTask(
     taskDetailUri: string,
     name: string,
@@ -224,10 +183,6 @@ export class Labelless extends Contract {
     amount: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
-
-  getCount(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "getCount()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   initilaize(
     USD: string,
@@ -300,14 +255,6 @@ export class Labelless extends Contract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    countDown(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "countDown()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    countUp(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "countUp()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     createTask(
       taskDetailUri: string,
       name: string,
@@ -321,10 +268,6 @@ export class Labelless extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    getCount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getCount()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     initilaize(
       USD: string,
@@ -385,19 +328,9 @@ export class Labelless extends Contract {
     ): Promise<void>;
   };
 
-  filters: {
-    CountedTo(number: null): EventFilter;
-  };
+  filters: {};
 
   estimateGas: {
-    countDown(overrides?: Overrides): Promise<BigNumber>;
-
-    "countDown()"(overrides?: Overrides): Promise<BigNumber>;
-
-    countUp(overrides?: Overrides): Promise<BigNumber>;
-
-    "countUp()"(overrides?: Overrides): Promise<BigNumber>;
-
     createTask(
       taskDetailUri: string,
       name: string,
@@ -411,10 +344,6 @@ export class Labelless extends Contract {
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
-
-    getCount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "getCount()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     initilaize(
       USD: string,
@@ -476,14 +405,6 @@ export class Labelless extends Contract {
   };
 
   populateTransaction: {
-    countDown(overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    "countDown()"(overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    countUp(overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    "countUp()"(overrides?: Overrides): Promise<PopulatedTransaction>;
-
     createTask(
       taskDetailUri: string,
       name: string,
@@ -497,10 +418,6 @@ export class Labelless extends Contract {
       amount: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
-
-    getCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "getCount()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initilaize(
       USD: string,
