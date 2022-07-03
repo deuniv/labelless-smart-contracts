@@ -237,17 +237,19 @@ contract Labelless {
         ////////////////////////////////////////
         //// Distribution Actions
         ////////////////////////////////////////
+        LabellessTaskDetails memory taskDetails = _taskDetails[taskId];
+
         // To Labeller
-        _usd.transferFrom(address(this), _taskDetails[taskId].Labeller, _taskDetails[taskId].labellerUsdValue);
-        _llt.mint(_taskDetails[taskId].Labeller, _taskDetails[taskId].labellerLltValue); // LLT award shall be different than USD value?
+        _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.labellerUsdValue);
+        _llt.mint(taskDetails.Labeller,taskDetails.labellerLltValue); // LLT award shall be different than USD value?
 
         // To Verifier
-        _usd.transferFrom(address(this), _taskDetails[taskId].Labeller, _taskDetails[taskId].verifierUsdValue);
-        _llt.mint(_taskDetails[taskId].Verifier, _taskDetails[taskId].verifierLltValue);
+        _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.verifierUsdValue);
+        _llt.mint(taskDetails.Verifier, taskDetails.verifierLltValue);
 
         // To Innovator
-        _usd.transferFrom(address(this), _taskDetails[taskId].Labeller, _taskDetails[taskId].innovatorUsdValue);
-        _llt.mint(_taskDetails[taskId].Verifier, _taskDetails[taskId].innovatorLltValue);
+        _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.innovatorUsdValue);
+        _llt.mint(taskDetails.Verifier, taskDetails.innovatorLltValue);
 
         // Award the distributor action taker, it is Labelless DAO by default (?)
         _llt.mint(msg.sender, 10000000); // Award the diststributor : ETH/SOL => LLT / AMM

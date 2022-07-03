@@ -3182,17 +3182,19 @@ contract Labelless {
         
         
         
-        
-        _usd.transferFrom(address(this), _taskDetails[taskId].Labeller, _taskDetails[taskId].labellerUsdValue);
-        _llt.mint(_taskDetails[taskId].Labeller, _taskDetails[taskId].labellerLltValue); 
+        LabellessTaskDetails memory taskDetails = _taskDetails[taskId];
 
         
-        _usd.transferFrom(address(this), _taskDetails[taskId].Labeller, _taskDetails[taskId].verifierUsdValue);
-        _llt.mint(_taskDetails[taskId].Verifier, _taskDetails[taskId].verifierLltValue);
+        _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.labellerUsdValue);
+        _llt.mint(taskDetails.Labeller,taskDetails.labellerLltValue); 
 
         
-        _usd.transferFrom(address(this), _taskDetails[taskId].Labeller, _taskDetails[taskId].innovatorUsdValue);
-        _llt.mint(_taskDetails[taskId].Verifier, _taskDetails[taskId].innovatorLltValue);
+        _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.verifierUsdValue);
+        _llt.mint(taskDetails.Verifier, taskDetails.verifierLltValue);
+
+        
+        _usd.transferFrom(address(this), taskDetails.Labeller, taskDetails.innovatorUsdValue);
+        _llt.mint(taskDetails.Verifier, taskDetails.innovatorLltValue);
 
         
         _llt.mint(msg.sender, 10000000); 
