@@ -20,7 +20,6 @@ export type { LabellessSoulBoundToken } from "./LabellessSoulBoundToken";
 export type { LabellessStableToken } from "./LabellessStableToken";
 export type { LabellessTask } from "./LabellessTask";
 export type { LabellessToken } from "./LabellessToken";
-export type { Greeter } from "./Greeter";
 export type { Migrations } from "./Migrations";
 
 export { ERC165__factory } from "./factories/ERC165__factory";
@@ -42,5 +41,4 @@ export { LabellessSoulBoundToken__factory } from "./factories/LabellessSoulBound
 export { LabellessStableToken__factory } from "./factories/LabellessStableToken__factory";
 export { LabellessTask__factory } from "./factories/LabellessTask__factory";
 export { LabellessToken__factory } from "./factories/LabellessToken__factory";
-export { Greeter__factory } from "./factories/Greeter__factory";
 export { Migrations__factory } from "./factories/Migrations__factory";
