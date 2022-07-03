@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/bury.huang/git/webapp/labelless-smart-contracts/contracts/Counter.sol": {
-      "lastModificationDate": 1656792969494,
-      "contentHash": "c20464d2b71f4a43793816ec02654e8a",
+      "lastModificationDate": 1656818218776,
+      "contentHash": "154118f03e7ea9e84fcfad16ddd79b9c",
       "sourceName": "contracts/Counter.sol",
       "solcConfig": {
         "version": "0.7.3",

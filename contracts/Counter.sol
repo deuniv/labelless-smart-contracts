@@ -30,14 +30,25 @@ contract LabellessSoulBoundToken is ERC721 {
     }
 }
 
-struct Task {
-    string Name;
-    string DetailUri;
-    string ResultUri;
-}
 
 contract LabellessTask is ERC721 {
     using Counters for Counters.Counter;
+
+    // () = createTask => TODO
+    // TODO => takeTask => IN_PROGRESS
+    // IN_PROGRESS => submitTask => REVIEW
+    // REVIEW => reviewTask => IN_REVIEW
+    // IN_REVIEW => verifyTask => VERIFIED
+    // IN_REVIEW => rejectTask => REJECTED
+
+    enum TaskState { TODO, IN_PROGRESS, REVIEW, IN_REVIEW, VERIFIED, REJECTED }
+
+    struct Task {
+        string Name;
+        string DetailUri;
+        string ResultUri;
+        TaskState State;
+    }
 
     constructor() ERC721("Labelless Task", "LLTSK") public {  
     }
@@ -53,38 +64,46 @@ contract LabellessTask is ERC721 {
         _mint(owner, newTaskId);
         _taskMapping[newTaskId].Name = name;
         _taskMapping[newTaskId].DetailUri = taskDetailUri;
+        _taskMapping[newTaskId].State = TaskState.TODO;
         return newTaskId;
     }
 
     function takeTask(address owner, uint256 taskId) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(balanceOf(msg.sender) == 0, "Sender has alrady taken one task.");
+        require(_taskMapping[taskId].State == TaskState.TODO || _taskMapping[taskId].State == TaskState.REJECTED, "Task must be in TODO or REJECTED state to be taken.");
         _safeTransfer(owner, msg.sender, taskId, "");
+        _taskMapping[taskId].State = TaskState.IN_PROGRESS;
     }
 
     function submitTask(address owner, uint256 taskId, string memory resultUri) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(ownerOf(taskId) == msg.sender);
+        require(_taskMapping[taskId].State == TaskState.IN_PROGRESS);
         _taskMapping[taskId].ResultUri = resultUri;
         _safeTransfer(msg.sender, owner, taskId, "");
+        _taskMapping[taskId].State = TaskState.REVIEW;
     }
 
     function reviewTask(address owner, uint256 taskId) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(balanceOf(msg.sender) == 0, "Sender has alrady taken one task.");
         _safeTransfer(owner, msg.sender, taskId, "");
-    }
+         _taskMapping[taskId].State = TaskState.IN_REVIEW;
+   }
 
     function verifyTask(address owner, uint256 taskId) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(ownerOf(taskId) == msg.sender);
         _safeTransfer(msg.sender, owner, taskId, "");
+         _taskMapping[taskId].State = TaskState.VERIFIED;
     }
 
     function rejectTask(address owner, uint256 taskId) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(ownerOf(taskId) == msg.sender);
         _safeTransfer(msg.sender, owner, taskId, "");
+         _taskMapping[taskId].State = TaskState.REJECTED;
     }
 }
 
