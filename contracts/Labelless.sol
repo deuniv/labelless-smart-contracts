@@ -57,6 +57,23 @@ contract LabellessTask is ERC721 {
 
     mapping(uint256 => Task) _taskMapping;
 
+    event TaskToTodo(address creator, uint256 taskId, string name);
+    event TaskToInProgress(address creator, uint256 taskId);
+    event TaskToReview(address creator, uint256 taskId);
+    event TaskToInReview(address creator, uint256 taskId);
+    event TaskToVerified(address creator, uint256 taskId);
+    event TaskToRejected(address creator, uint256 taskId);
+
+    modifier OnlyTaskInState(uint256 taskId, TaskState state) {
+        require(_taskMapping[taskId].State == state);
+        _;
+    }
+
+    modifier OnlyTaskInState2(uint256 taskId, TaskState state1, TaskState state2) {
+        require(_taskMapping[taskId].State == state1 || _taskMapping[taskId].State == state2);
+        _;
+    }
+
     function createTask(address owner, string memory taskDetailUri, string memory name) public returns (uint256) {
         _taskIds.increment();
 
@@ -65,45 +82,50 @@ contract LabellessTask is ERC721 {
         _taskMapping[newTaskId].Name = name;
         _taskMapping[newTaskId].DetailUri = taskDetailUri;
         _taskMapping[newTaskId].State = TaskState.TODO;
+        emit TaskToTodo(msg.sender, newTaskId, name);
         return newTaskId;
     }
 
-    function takeTask(address owner, uint256 taskId) public {
+    function takeTask(address owner, uint256 taskId) OnlyTaskInState2(taskId, TaskState.TODO, TaskState.REJECTED) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(balanceOf(msg.sender) == 0, "Sender has alrady taken one task.");
         require(_taskMapping[taskId].State == TaskState.TODO || _taskMapping[taskId].State == TaskState.REJECTED, "Task must be in TODO or REJECTED state to be taken.");
         _safeTransfer(owner, msg.sender, taskId, "");
         _taskMapping[taskId].State = TaskState.IN_PROGRESS;
+        emit TaskToInProgress(msg.sender, taskId);
     }
 
-    function submitTask(address owner, uint256 taskId, string memory resultUri) public {
+    function submitTask(address owner, uint256 taskId, string memory resultUri) OnlyTaskInState(taskId, TaskState.IN_PROGRESS) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(ownerOf(taskId) == msg.sender);
-        require(_taskMapping[taskId].State == TaskState.IN_PROGRESS);
         _taskMapping[taskId].ResultUri = resultUri;
         _safeTransfer(msg.sender, owner, taskId, "");
         _taskMapping[taskId].State = TaskState.REVIEW;
+        emit TaskToReview(msg.sender, taskId);
     }
 
-    function reviewTask(address owner, uint256 taskId) public {
+    function reviewTask(address owner, uint256 taskId) OnlyTaskInState(taskId, TaskState.REVIEW) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(balanceOf(msg.sender) == 0, "Sender has alrady taken one task.");
         _safeTransfer(owner, msg.sender, taskId, "");
          _taskMapping[taskId].State = TaskState.IN_REVIEW;
+        emit TaskToInReview(msg.sender, taskId);
    }
 
-    function verifyTask(address owner, uint256 taskId) public {
+    function verifyTask(address owner, uint256 taskId) OnlyTaskInState(taskId, TaskState.IN_REVIEW) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(ownerOf(taskId) == msg.sender);
         _safeTransfer(msg.sender, owner, taskId, "");
-         _taskMapping[taskId].State = TaskState.VERIFIED;
+        _taskMapping[taskId].State = TaskState.VERIFIED;
+        emit TaskToVerified(msg.sender, taskId);
     }
 
-    function rejectTask(address owner, uint256 taskId) public {
+    function rejectTask(address owner, uint256 taskId) OnlyTaskInState(taskId, TaskState.IN_REVIEW) public {
         // function _transfer(address from, address to, uint256 tokenId)
         require(ownerOf(taskId) == msg.sender);
         _safeTransfer(msg.sender, owner, taskId, "");
          _taskMapping[taskId].State = TaskState.REJECTED;
+        emit TaskToRejected(msg.sender, taskId);
     }
 }
 

@@ -812,8 +812,8 @@
       ]
     },
     "/Users/bury.huang/git/webapp/labelless-smart-contracts/contracts/Labelless.sol": {
-      "lastModificationDate": 1656818481570,
-      "contentHash": "154118f03e7ea9e84fcfad16ddd79b9c",
+      "lastModificationDate": 1656828461363,
+      "contentHash": "15f27f65015102de47400f6286785f96",
       "sourceName": "contracts/Labelless.sol",
       "solcConfig": {
         "version": "0.7.3",

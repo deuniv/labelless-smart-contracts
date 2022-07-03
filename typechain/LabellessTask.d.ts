@@ -176,11 +176,23 @@ interface LabellessTaskInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "TaskToInProgress(address,uint256)": EventFragment;
+    "TaskToInReview(address,uint256)": EventFragment;
+    "TaskToRejected(address,uint256)": EventFragment;
+    "TaskToReview(address,uint256)": EventFragment;
+    "TaskToTodo(address,uint256,string)": EventFragment;
+    "TaskToVerified(address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskToInProgress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskToInReview"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskToRejected"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskToReview"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskToTodo"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskToVerified"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -946,6 +958,18 @@ export class LabellessTask extends Contract {
       operator: string | null,
       approved: null
     ): EventFilter;
+
+    TaskToInProgress(creator: null, taskId: null): EventFilter;
+
+    TaskToInReview(creator: null, taskId: null): EventFilter;
+
+    TaskToRejected(creator: null, taskId: null): EventFilter;
+
+    TaskToReview(creator: null, taskId: null): EventFilter;
+
+    TaskToTodo(creator: null, taskId: null, name: null): EventFilter;
+
+    TaskToVerified(creator: null, taskId: null): EventFilter;
 
     Transfer(
       from: string | null,
